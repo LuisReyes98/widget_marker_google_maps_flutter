@@ -1,10 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:widget_marker_google_map/src/components/widget_marker.dart';
 
@@ -12,7 +8,7 @@ import 'components/marker_generator.dart';
 
 class WidgetMarkerGoogleMap extends StatefulWidget {
   const WidgetMarkerGoogleMap({
-    Key? key,
+    super.key,
     required this.initialCameraPosition,
     this.onMapCreated,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
@@ -47,7 +43,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   /// Callback method for when the map is ready to be used.
   ///
@@ -222,10 +218,10 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
         if (widget.widgetMarkers.isNotEmpty)
           MarkerGenerator(
             widgetMarkers: widget.widgetMarkers,
-            onMarkerGenerated: (_markers) {
+            onMarkerGenerated: (generatedMarkers) {
               setState(
                 () {
-                  markers = _markers.toSet();
+                  markers = generatedMarkers.toSet();
                 },
               );
             },

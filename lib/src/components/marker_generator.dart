@@ -8,18 +8,18 @@ import '../../widget_marker_google_map.dart';
 
 class MarkerGenerator extends StatefulWidget {
   const MarkerGenerator({
-    Key? key,
+    super.key,
     required this.widgetMarkers,
     required this.onMarkerGenerated,
-  }) : super(key: key);
+  });
   final List<WidgetMarker> widgetMarkers;
   final ValueChanged<List<Marker>> onMarkerGenerated;
 
   @override
-  _MarkerGeneratorState createState() => _MarkerGeneratorState();
+  MarkerGeneratorState createState() => MarkerGeneratorState();
 }
 
-class _MarkerGeneratorState extends State<MarkerGenerator> {
+class MarkerGeneratorState extends State<MarkerGenerator> {
   List<GlobalKey> globalKeys = [];
   List<WidgetMarker> lastMarkers = [];
 
@@ -35,7 +35,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       onTap: widgetMarker.onTap,
       markerId: MarkerId(widgetMarker.markerId),
       position: widgetMarker.position,
-      icon: BitmapDescriptor.fromBytes(uint8List),
+      icon: BitmapDescriptor.bytes(uint8List),
       draggable: widgetMarker.draggable,
       infoWindow: widgetMarker.infoWindow,
       rotation: widgetMarker.rotation,
@@ -50,7 +50,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => onBuildCompleted());
+    WidgetsBinding.instance.addPostFrameCallback((_) => onBuildCompleted());
   }
 
   Future<void> onBuildCompleted() async {
