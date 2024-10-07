@@ -49,7 +49,7 @@ class MyHomePage extends StatelessWidget {
               child: const Icon(
                 Icons.coffee,
                 color: Colors.white,
-                size: 64,
+                size: 14,
               ),
             ),
           ),
@@ -64,7 +64,7 @@ class MyHomePage extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 32,
+                  fontSize: 10,
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class MyHomePage extends StatelessWidget {
               child: const Icon(
                 Icons.fastfood,
                 color: Colors.yellow,
-                size: 64,
+                size: 14,
               ),
             ),
           ),
