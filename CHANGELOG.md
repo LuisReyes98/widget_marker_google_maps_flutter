@@ -5,6 +5,7 @@
 - Updates minimum flutter version to 3.16.0
 - Updates minimun dart version to 3.0.0
 - Breaking change use of new method `BitmapDescriptor.bytes` unifies marker size accross platforms web,android and ios, and previous work arounds that used the `devicePixelRatio` are no longer needed and in turn will make the markers too big.
+- Added new `GoogleMap` props to be available from the `WidgetMarkerGoogleMap` widget.
 
 ## 0.0.2
 - Added missing arguments
