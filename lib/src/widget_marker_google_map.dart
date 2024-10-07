@@ -43,6 +43,12 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
+    this.cloudMapId,
+    this.webGestureHandling,
+    this.style,
+    this.clusterManagers = const <ClusterManager>{},
+    this.fortyFiveDegreeImageryEnabled = false,
+    this.heatmaps = const <Heatmap>{},
   });
 
   /// Callback method for when the map is ready to be used.
@@ -202,6 +208,39 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
+  /// Identifier that's associated with a specific cloud-based map style.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more details.
+  final String? cloudMapId;
+
+  /// This setting controls how the API handles gestures on the map. Web only.
+  ///
+  /// See [WebGestureHandling] for more details.
+  final WebGestureHandling? webGestureHandling;
+
+  /// The style for the map.
+  ///
+  /// Set to null to clear any previous custom styling.
+  ///
+  /// If problems were detected with the [mapStyle], including un-parsable
+  /// styling JSON, unrecognized feature type, unrecognized element type, or
+  /// invalid styler keys, the style is left unchanged, and the error can be
+  /// retrieved with [GoogleMapController.getStyleError].
+  ///
+  /// The style string can be generated using the
+  /// [map style tool](https://mapstyle.withgoogle.com/).
+  final String? style;
+
+  /// Cluster Managers to be initialized for the map.
+  final Set<ClusterManager> clusterManagers;
+
+  /// True if 45 degree imagery should be enabled. Web only.
+  final bool fortyFiveDegreeImageryEnabled;
+
+  /// Heatmaps to show on the map.
+  final Set<Heatmap> heatmaps;
+
   final List<WidgetMarker> widgetMarkers;
 
   @override
@@ -259,6 +298,12 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           onCameraIdle: widget.onCameraIdle,
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
+          cloudMapId: widget.cloudMapId,
+          webGestureHandling: widget.webGestureHandling,
+          style: widget.style,
+          clusterManagers: widget.clusterManagers,
+          fortyFiveDegreeImageryEnabled: widget.fortyFiveDegreeImageryEnabled,
+          heatmaps: widget.heatmaps,
         ),
       ],
     );
