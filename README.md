@@ -97,6 +97,55 @@ class WidgetMarker {
 
 If you have any requests or questions, feel free to ask on [github](https://github.com/santa112358/widget_marker_google_map/issues).
 
+### Migrating to 1.0
+
+The update to the `google_maps_flutter_platform_interface: ^2.8.0` changes that, Deprecate `BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` and `BytesMapBitmap`.
+
+This fixed a long standing bug where the markers size would change depending of the platform.
+
+The workaround before used to be to multiply the `devicePixelRatio` to the `width` and `height` of the `BitmapDescriptor.fromBytes` to make the markers the same size across platforms and use the value of 1 for `devicePixelRatio` of web platform.
+
+This would make code like this:
+
+#### Before
+```dart
+WidgetMarker(
+  position: cafePosition,
+  markerId: 'cafe',
+  widget: Container(
+    color: Colors.brown,
+    padding: const EdgeInsets.all(2),
+    child: Icon(
+      Icons.coffee,
+      color: Colors.white,
+      size: 14 * MediaQuery.of(context).devicePixelRatio,
+    ),
+  ),
+)
+```
+
+Now this code will have to be changed to:
+
+#### After
+
+```dart
+WidgetMarker(
+  position: cafePosition,
+  markerId: 'cafe',
+  widget: Container(
+    color: Colors.brown,
+    padding: const EdgeInsets.all(2),
+    child: const Icon(
+      Icons.coffee,
+      color: Colors.white,
+      size: 14,
+    ),
+  ),
+)
+```
+
+It is more straightforward and easier to maintain. This being the only consideration if you have been mainting a multiplatform app with this package, or `google_maps_flutter` in general.
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
