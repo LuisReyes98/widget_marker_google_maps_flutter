@@ -1,4 +1,4 @@
-library widget_marker_google_map;
+library;
 
 export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
     show

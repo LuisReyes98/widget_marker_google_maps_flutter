@@ -16,10 +16,10 @@ class MarkerGenerator extends StatefulWidget {
   final ValueChanged<List<Marker>> onMarkerGenerated;
 
   @override
-  MarkerGeneratorState createState() => MarkerGeneratorState();
+  State<MarkerGenerator> createState() => _MarkerGeneratorState();
 }
 
-class MarkerGeneratorState extends State<MarkerGenerator> {
+class _MarkerGeneratorState extends State<MarkerGenerator> {
   List<GlobalKey> globalKeys = [];
   List<WidgetMarker> lastMarkers = [];
 
