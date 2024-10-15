@@ -35,7 +35,9 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       onTap: widgetMarker.onTap,
       markerId: MarkerId(widgetMarker.markerId),
       position: widgetMarker.position,
-      icon: BitmapDescriptor.bytes(uint8List),
+      icon: BitmapDescriptor.bytes(
+        uint8List,
+      ),
       draggable: widgetMarker.draggable,
       infoWindow: widgetMarker.infoWindow,
       rotation: widgetMarker.rotation,
@@ -44,6 +46,11 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       onDragStart: widgetMarker.onDragStart,
       onDragEnd: widgetMarker.onDragEnd,
       onDrag: widgetMarker.onDrag,
+      flat: widgetMarker.flat,
+      consumeTapEvents: widgetMarker.consumeTapEvents,
+      clusterManagerId: widgetMarker.clusterManagerId,
+      alpha: widgetMarker.alpha,
+      anchor: widgetMarker.anchor,
     );
   }
 

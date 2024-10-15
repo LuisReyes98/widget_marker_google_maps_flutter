@@ -15,6 +15,11 @@ class WidgetMarker {
     this.onDrag,
     this.onDragStart,
     this.onDragEnd,
+    this.clusterManagerId,
+    this.alpha = 1.0,
+    this.anchor = const Offset(0.5, 1.0),
+    this.flat = false,
+    this.consumeTapEvents = false,
   }) : assert(markerId != '');
 
   final LatLng position;
@@ -59,6 +64,30 @@ class WidgetMarker {
   /// Signature reporting the new [LatLng] during the drag event.
   final ValueChanged<LatLng>? onDrag;
 
+  /// Marker clustering is managed by [ClusterManager] with [clusterManagerId].
+  final ClusterManagerId? clusterManagerId;
+
+  /// The opacity of the marker, between 0.0 and 1.0 inclusive.
+  ///
+  /// 0.0 means fully transparent, 1.0 means fully opaque.
+  final double alpha;
+
+  /// The icon image point that will be placed at the [position] of the marker.
+  ///
+  /// The image point is specified in normalized coordinates: An anchor of
+  /// (0.0, 0.0) means the top left corner of the image. An anchor
+  /// of (1.0, 1.0) means the bottom right corner of the image.
+  final Offset anchor;
+
+  /// True if the marker is rendered flatly against the surface of the Earth, so
+  /// that it will rotate and tilt along with map camera movements.
+  final bool flat;
+
+  /// True if the marker icon consumes tap events. If not, the map will perform
+  /// default tap handling by centering the map on the marker and displaying its
+  /// info window.
+  final bool consumeTapEvents;
+
   WidgetMarker copyWith({
     LatLng? position,
     String? markerId,
@@ -72,6 +101,11 @@ class WidgetMarker {
     ValueChanged<LatLng>? onDragStart,
     ValueChanged<LatLng>? onDragEnd,
     ValueChanged<LatLng>? onDrag,
+    ClusterManagerId? clusterManagerId,
+    double? alpha,
+    Offset? anchor,
+    bool? flat,
+    bool? consumeTapEvents,
   }) {
     return WidgetMarker(
       position: position ?? this.position,
@@ -86,6 +120,11 @@ class WidgetMarker {
       onDragStart: onDragStart ?? this.onDragStart,
       onDragEnd: onDragEnd ?? this.onDragEnd,
       onDrag: onDrag ?? this.onDrag,
+      clusterManagerId: clusterManagerId ?? this.clusterManagerId,
+      alpha: alpha ?? this.alpha,
+      anchor: anchor ?? this.anchor,
+      flat: flat ?? this.flat,
+      consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
     );
   }
 
@@ -109,7 +148,12 @@ class WidgetMarker {
             other.zIndex == zIndex &&
             other.onDragStart == onDragStart &&
             other.onDragEnd == onDragEnd &&
-            other.onDrag == onDrag;
+            other.onDrag == onDrag &&
+            other.clusterManagerId == clusterManagerId &&
+            other.alpha == alpha &&
+            other.anchor == anchor &&
+            other.flat == flat &&
+            other.consumeTapEvents == consumeTapEvents;
   }
 
   @override
@@ -125,6 +169,11 @@ class WidgetMarker {
         zIndex.hashCode ^
         onDragStart.hashCode ^
         onDragEnd.hashCode ^
-        onDrag.hashCode;
+        onDrag.hashCode ^
+        clusterManagerId.hashCode ^
+        alpha.hashCode ^
+        anchor.hashCode ^
+        flat.hashCode ^
+        consumeTapEvents.hashCode;
   }
 }
