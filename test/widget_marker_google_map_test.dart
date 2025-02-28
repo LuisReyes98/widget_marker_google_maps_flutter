@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:widget_marker_google_maps_flutter/widget_marker_google_map.dart';
+import 'package:widget_marker_google_maps_flutter/widget_marker_google_maps_flutter.dart';
 
 void main() {
   test('Test Widget Creation', () {
