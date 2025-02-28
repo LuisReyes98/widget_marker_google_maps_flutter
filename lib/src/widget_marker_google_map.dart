@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:widget_marker_google_map/src/components/widget_marker.dart';
 
 import 'components/marker_generator.dart';
+import 'components/widget_marker.dart';
 
 class WidgetMarkerGoogleMap extends StatefulWidget {
   /// True if 45 degree imagery should be enabled. Web only.

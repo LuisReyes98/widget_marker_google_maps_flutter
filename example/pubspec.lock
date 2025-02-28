@@ -309,7 +309,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  widget_marker_google_map:
+  widget_marker_google_maps_flutter:
     dependency: "direct main"
     description:
       path: ".."

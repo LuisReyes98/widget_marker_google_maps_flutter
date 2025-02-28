@@ -1,9 +1,9 @@
-# widget_marker_google_map
+# widget_marker_google_maps_flutter
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-[![pub package](https://img.shields.io/pub/v/widget_marker_google_map.svg)](https://pub.dev/packages/widget_marker_google_map) <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+[![pub package](https://img.shields.io/pub/v/widget_marker_google_maps_flutter.svg)](https://pub.dev/packages/widget_marker_google_maps_flutter) <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 
 Google map with widget markers.
 
@@ -36,6 +36,10 @@ WidgetMarker(
 ```
 
 ### 1.0 Usage and Breaking changes
+
+```dart
+import 'package:widget_marker_google_maps_flutter/widget_marker_google_map.dart';
+```
 
 Changed `markers` and `widgetMarkers` from a `Set` to a `Map`
 This code can be seen in the example below.
@@ -128,7 +132,7 @@ class WidgetMarker {
 }
 ```
 
-If you have any requests or questions, feel free to ask on [github](https://github.com/santa112358/widget_marker_google_map/issues).
+If you have any requests or questions, feel free to ask on [github](https://github.com/santa112358/widget_marker_google_maps_flutter/issues).
 
 
 
@@ -142,9 +146,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/davey06"><img src="https://avatars.githubusercontent.com/u/32833275?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Devin</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=davey06" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://pub.dev/publishers/3tadev.work/packages"><img src="https://avatars.githubusercontent.com/u/43510799?v=4?s=100" width="100px;" alt="Santa Takahashi"/><br /><sub><b>Santa Takahashi</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=santa112358" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LuisReyes98"><img src="https://avatars.githubusercontent.com/u/26679961?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Luis Rogelio</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=LuisReyes98" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/davey06"><img src="https://avatars.githubusercontent.com/u/32833275?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Devin</b></sub></a><br /><a href="https://github.com/LuisReyes98/widget_marker_google_maps_flutter/commits?author=davey06" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://pub.dev/publishers/3tadev.work/packages"><img src="https://avatars.githubusercontent.com/u/43510799?v=4?s=100" width="100px;" alt="Santa Takahashi"/><br /><sub><b>Santa Takahashi</b></sub></a><br /><a href="https://github.com/LuisReyes98/widget_marker_google_maps_flutter/commits?author=santa112358" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LuisReyes98"><img src="https://avatars.githubusercontent.com/u/26679961?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Luis Rogelio</b></sub></a><br /><a href="https://github.com/LuisReyes98/widget_marker_google_maps_flutter/commits?author=LuisReyes98" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

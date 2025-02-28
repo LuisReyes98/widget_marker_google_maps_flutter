@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  widget_marker_google_map:
+  widget_marker_google_maps_flutter:
     path: ../
 
 dev_dependencies:
