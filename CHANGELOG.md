@@ -1,4 +1,5 @@
 ## 1.0.0
+- Forked from `https://pub.dev/packages/widget_marker_google_map`
 - Upgraded for flutter 3 linting rules
 - Updated to `google_maps_flutter_platform_interface: ^2.8.0` changes that, Deprecate `BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` and `BytesMapBitmap`
 - Removes invalid tags in pubspec.
