@@ -32,5 +32,6 @@ export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
         TileOverlay,
         TileProvider;
 
+export 'src/components/marker_generator.dart';
 export 'src/components/widget_marker.dart';
 export 'src/widget_marker_google_map.dart';

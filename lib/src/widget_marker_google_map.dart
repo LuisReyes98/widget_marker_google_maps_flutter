@@ -7,49 +7,14 @@ import 'package:widget_marker_google_map/src/components/widget_marker.dart';
 import 'components/marker_generator.dart';
 
 class WidgetMarkerGoogleMap extends StatefulWidget {
-  const WidgetMarkerGoogleMap({
-    super.key,
-    required this.initialCameraPosition,
-    this.onMapCreated,
-    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.compassEnabled = true,
-    this.mapToolbarEnabled = true,
-    this.cameraTargetBounds = CameraTargetBounds.unbounded,
-    this.mapType = MapType.normal,
-    this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
-    this.rotateGesturesEnabled = true,
-    this.scrollGesturesEnabled = true,
-    this.zoomControlsEnabled = true,
-    this.zoomGesturesEnabled = true,
-    this.liteModeEnabled = false,
-    this.tiltGesturesEnabled = true,
-    this.myLocationEnabled = false,
-    this.myLocationButtonEnabled = true,
-    this.layoutDirection,
+  /// True if 45 degree imagery should be enabled. Web only.
+  final bool fortyFiveDegreeImageryEnabled;
 
-    /// If no padding is specified default padding will be 0.
-    this.padding = const EdgeInsets.all(0),
-    this.indoorViewEnabled = false,
-    this.trafficEnabled = false,
-    this.buildingsEnabled = true,
-    this.markers = const <Marker>{},
-    this.widgetMarkers = const <WidgetMarker>[],
-    this.polygons = const <Polygon>{},
-    this.polylines = const <Polyline>{},
-    this.circles = const <Circle>{},
-    this.onCameraMoveStarted,
-    this.tileOverlays = const <TileOverlay>{},
-    this.onCameraMove,
-    this.onCameraIdle,
-    this.onTap,
-    this.onLongPress,
-    this.cloudMapId,
-    this.webGestureHandling,
-    this.style,
-    this.clusterManagers = const <ClusterManager>{},
-    this.fortyFiveDegreeImageryEnabled = false,
-    this.heatmaps = const <Heatmap>{},
-  });
+  /// Identifier that's associated with a specific cloud-based map style.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more details.
+  final String? cloudMapId;
 
   /// Callback method for when the map is ready to be used.
   ///
@@ -109,7 +74,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Markers to be placed on the map.
-  final Set<Marker> markers;
+  final Map<MarkerId, Marker> markers;
 
   /// Polygons to be placed on the map.
   final Set<Polygon> polygons;
@@ -197,6 +162,8 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   /// Enables or disables showing 3D buildings where available
   final bool buildingsEnabled;
 
+  final WebGestureHandling? webGestureHandling;
+
   /// Which gestures should be consumed by the map.
   ///
   /// It is possible for other gesture recognizers to be competing with the map on pointer
@@ -208,16 +175,11 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  /// Identifier that's associated with a specific cloud-based map style.
-  ///
-  /// See https://developers.google.com/maps/documentation/get-map-id
-  /// for more details.
-  final String? cloudMapId;
+  // final List<WidgetMarker> widgetMarkers;
+  final Map<MarkerId, WidgetMarker> widgetMarkers;
 
-  /// This setting controls how the API handles gestures on the map. Web only.
-  ///
-  /// See [WebGestureHandling] for more details.
-  final WebGestureHandling? webGestureHandling;
+  /// Heatmaps to show on the map.
+  final Set<Heatmap> heatmaps;
 
   /// The style for the map.
   ///
@@ -233,22 +195,154 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   final String? style;
 
   /// Cluster Managers to be initialized for the map.
+  ///
+  /// On the web, an extra step is required to enable clusters.
+  /// See https://pub.dev/packages/google_maps_flutter_web.
   final Set<ClusterManager> clusterManagers;
 
-  /// True if 45 degree imagery should be enabled. Web only.
-  final bool fortyFiveDegreeImageryEnabled;
+  /// if true will use [WidgetMarkerCache] to repaint the marker in a new location
+  /// it is useful when the marker is moved to a new location but its visual state did not change, Note that the [WidgetMarkerCache] is managed in a global scope so it may cause problems if multiples maps are handled at once.
+  /// It is managed in a global scope to allow clearing of its cache at any moment
+  final bool useCache;
 
-  /// Heatmaps to show on the map.
-  final Set<Heatmap> heatmaps;
+  const WidgetMarkerGoogleMap({
+    super.key,
+    required this.initialCameraPosition,
+    this.onMapCreated,
+    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+    this.compassEnabled = true,
+    this.mapToolbarEnabled = true,
+    this.cameraTargetBounds = CameraTargetBounds.unbounded,
+    this.mapType = MapType.normal,
+    this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
+    this.rotateGesturesEnabled = true,
+    this.scrollGesturesEnabled = true,
+    this.zoomControlsEnabled = true,
+    this.zoomGesturesEnabled = true,
+    this.liteModeEnabled = false,
+    this.tiltGesturesEnabled = true,
+    this.myLocationEnabled = false,
+    this.myLocationButtonEnabled = true,
+    this.layoutDirection,
 
-  final List<WidgetMarker> widgetMarkers;
+    /// If no padding is specified default padding will be 0.
+    this.padding = const EdgeInsets.all(0),
+    this.indoorViewEnabled = false,
+    this.trafficEnabled = false,
+    this.buildingsEnabled = true,
+    this.markers = const <MarkerId, Marker>{},
+    this.widgetMarkers = const <MarkerId, WidgetMarker>{},
+    this.polygons = const <Polygon>{},
+    this.polylines = const <Polyline>{},
+    this.circles = const <Circle>{},
+    this.onCameraMoveStarted,
+    this.tileOverlays = const <TileOverlay>{},
+    this.onCameraMove,
+    this.onCameraIdle,
+    this.onTap,
+    this.onLongPress,
+    this.cloudMapId,
+    this.webGestureHandling,
+    this.style,
+    this.clusterManagers = const <ClusterManager>{},
+    this.fortyFiveDegreeImageryEnabled = false,
+    this.heatmaps = const <Heatmap>{},
+    this.useCache = false,
+  });
 
   @override
   State<WidgetMarkerGoogleMap> createState() => _WidgetMarkerGoogleMapState();
 }
 
+/// Helper class to keep cache of the generated markers images
+class WidgetMarkerCache {
+  /// Variable to maintain cache of the generated marker images
+  static Map<MarkerId, BitmapDescriptor> _allGeneratedMarkersIcons =
+      <MarkerId, BitmapDescriptor>{};
+
+  /// Remove a marker by its markerId
+  static void removeMarker(MarkerId markerId) {
+    _allGeneratedMarkersIcons.remove(markerId);
+  }
+
+  /// Clear all markers
+  static void clearAllMarkers() {
+    _allGeneratedMarkersIcons = {};
+  }
+
+  static BitmapDescriptor? getMarkerBitmap(MarkerId markerId) {
+    return _allGeneratedMarkersIcons[markerId];
+  }
+
+  static void setMarkerBitmap({
+    required MarkerId markerId,
+    required BitmapDescriptor bitmap,
+  }) {
+    _allGeneratedMarkersIcons[markerId] = bitmap;
+  }
+}
+
 class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
-  Set<Marker> markers = {};
+  /// widget markers props
+  Map<MarkerId, WidgetMarker> get parentWidgetMarkers => widget.widgetMarkers;
+
+  /// compiled markers
+  Map<MarkerId, Marker> _markers = {};
+
+  /// plain markers
+  Map<MarkerId, Marker> get rawMarkers => widget.markers;
+
+  List<WidgetMarker> widgetMarkersToGenerate = [];
+
+  /// value notifier for updates on the widget markers
+  final ValueNotifier<Map<MarkerId, WidgetMarker>> notifier = ValueNotifier({});
+
+  /// value notifier for plain markers
+  final ValueNotifier<Map<MarkerId, Marker>> plainNotifier = ValueNotifier({});
+
+  @override
+  void initState() {
+    notifier.addListener(() {
+      _updateMarkers();
+    });
+    plainNotifier.addListener(() {
+      _updateMarkers();
+    });
+
+    super.initState();
+  }
+
+  /// to force update markers
+  void emptyGeneratedMarkers() {
+    WidgetMarkerCache.clearAllMarkers();
+    _updateMarkers();
+  }
+
+  void _updateMarkers() {
+    widgetMarkersToGenerate = [];
+    _markers = {};
+    _markers.addAll(rawMarkers);
+
+    if (!widget.useCache) {
+      // if no cache is used, we need to generate all markers
+      widgetMarkersToGenerate = List.from(parentWidgetMarkers.values);
+      setState(() {});
+      return;
+    }
+
+    for (final entry in parentWidgetMarkers.entries) {
+      if (WidgetMarkerCache.getMarkerBitmap(entry.key) == null) {
+        widgetMarkersToGenerate.add(entry.value);
+      } else {
+        _markers[entry.key] = markerFromWidgetMarkerWithIcon(
+          widgetMarker: entry.value,
+          icon: WidgetMarkerCache.getMarkerBitmap(entry.key)!,
+        );
+      }
+    }
+    widgetMarkersToGenerate = List.from(widgetMarkersToGenerate);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,17 +350,26 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
       children: [
         if (widget.widgetMarkers.isNotEmpty)
           MarkerGenerator(
-            widgetMarkers: widget.widgetMarkers,
+            widgetMarkers: widgetMarkersToGenerate,
             onMarkerGenerated: (generatedMarkers) {
-              setState(
-                () {
-                  markers = generatedMarkers.toSet();
-                },
-              );
+              for (final generatedMarker in generatedMarkers) {
+                WidgetMarkerCache.setMarkerBitmap(
+                  markerId: generatedMarker.markerId,
+                  bitmap: generatedMarker.icon,
+                );
+                _markers[generatedMarker.markerId] = generatedMarker;
+              }
+              Future.delayed(Duration.zero, () {
+                // delay set state to make sure it is called last in the frame
+                setState(() {});
+              });
             },
           ),
         GoogleMap(
           key: widget.key,
+          markers: parentWidgetMarkers.isNotEmpty
+              ? _markers.values.toSet()
+              : widget.markers.values.toSet(),
           initialCameraPosition: widget.initialCameraPosition,
           onMapCreated: widget.onMapCreated,
           gestureRecognizers: widget.gestureRecognizers,
@@ -288,7 +391,6 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           indoorViewEnabled: widget.indoorViewEnabled,
           trafficEnabled: widget.trafficEnabled,
           buildingsEnabled: widget.buildingsEnabled,
-          markers: markers,
           polygons: widget.polygons,
           polylines: widget.polylines,
           circles: widget.circles,
@@ -307,5 +409,34 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
         ),
       ],
     );
+  }
+
+  Marker markerFromWidgetMarkerWithIcon({
+    required WidgetMarker widgetMarker,
+    required BitmapDescriptor icon,
+  }) {
+    return Marker(
+      onTap: widgetMarker.onTap,
+      markerId: MarkerId(widgetMarker.markerId),
+      position: widgetMarker.position,
+      icon: icon,
+      draggable: widgetMarker.draggable,
+      infoWindow: widgetMarker.infoWindow,
+      rotation: widgetMarker.rotation,
+      visible: widgetMarker.visible,
+      zIndex: widgetMarker.zIndex,
+      onDragStart: widgetMarker.onDragStart,
+      onDragEnd: widgetMarker.onDragEnd,
+      onDrag: widgetMarker.onDrag,
+      flat: widgetMarker.flat,
+      anchor: widgetMarker.anchor,
+      alpha: widgetMarker.alpha,
+      consumeTapEvents: widgetMarker.consumeTapEvents,
+      clusterManagerId: widgetMarker.clusterManagerId,
+    );
+  }
+
+  Map<MarkerId, Marker> getMarkers() {
+    return _markers;
   }
 }

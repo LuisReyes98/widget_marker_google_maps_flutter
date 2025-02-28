@@ -31,7 +31,7 @@ class MyHomePage extends StatelessWidget {
 
   static const cafePosition = LatLng(35.659172, 139.7023894);
   static const clothesShopPosition = LatLng(35.659528, 139.698723);
-  static const hamburgerShopPosition = LatLng(35.6614027, 139.6983333);
+  static const flutterLogoPosition = LatLng(35.6614027, 139.6983333);
 
   @override
   Widget build(BuildContext context) {
@@ -39,76 +39,60 @@ class MyHomePage extends StatelessWidget {
       body: WidgetMarkerGoogleMap(
         initialCameraPosition: shibuya,
         mapType: MapType.normal,
-        widgetMarkers: [
-          WidgetMarker(
+        markers: {
+          const MarkerId('default_marker'): Marker(
+            position: shibuya.target,
+            markerId: const MarkerId('default_marker'),
+          ),
+        },
+        widgetMarkers: <MarkerId, WidgetMarker>{
+          const MarkerId(
+            'cafe',
+          ): WidgetMarker(
             position: cafePosition,
             markerId: 'cafe',
             widget: Container(
               color: Colors.brown,
               padding: const EdgeInsets.all(2),
-              child: const Icon(
+              child: Icon(
                 Icons.coffee,
                 color: Colors.white,
-                size: 14,
+                size: 14 * MarkerGenerator.getDevicePixelRatio(context),
               ),
             ),
           ),
-          WidgetMarker(
+          const MarkerId(
+            'clothes',
+          ): WidgetMarker(
             position: clothesShopPosition,
             markerId: 'clothes',
             widget: Container(
               color: Colors.green,
               padding: const EdgeInsets.all(4),
-              child: const Text(
+              child: Text(
                 'shop',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: 10 * MarkerGenerator.getDevicePixelRatio(context),
                 ),
               ),
             ),
           ),
-          WidgetMarker(
-            position: hamburgerShopPosition,
-            markerId: 'hamburger',
-            widget: Container(
-              color: Colors.red,
-              padding: const EdgeInsets.all(2),
-              child: const Icon(
-                Icons.fastfood,
-                color: Colors.yellow,
-                size: 14,
+          const MarkerId(
+            'network_flutterlogo',
+          ): WidgetMarker(
+            position: flutterLogoPosition,
+            markerId: 'network_flutterlogo',
+            widget: SizedBox(
+              width: 18 * MarkerGenerator.getDevicePixelRatio(context),
+              height: 18 * MarkerGenerator.getDevicePixelRatio(context),
+              child: Image.network(
+                'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MarkerContent extends StatelessWidget {
-  const _MarkerContent({
-    Key? key,
-    required this.backgroundColor,
-    required this.icon,
-  }) : super(key: key);
-
-  final Color backgroundColor;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: backgroundColor,
-      ),
-      child: Icon(
-        icon,
-        color: Colors.white,
+        },
       ),
     );
   }
