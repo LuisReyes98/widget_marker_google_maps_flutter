@@ -6,7 +6,7 @@
 [![pub package](https://img.shields.io/pub/v/widget_marker_google_maps_flutter.svg)](https://pub.dev/packages/widget_marker_google_maps_flutter) <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 
 
-This package is a fork of [widget_marker_google_map](https://pub.dev/packages/widget_marker_google_map) that was created to add support for the new `google_maps_flutter_platform_interface: ^2.8.0` changes that. And also add new functionality to the `WidgetMarkerGoogleMap` widget.
+This package is a fork of [widget_marker_google_map](https://pub.dev/packages/widget_marker_google_map) that was created to add support for the new `google_maps_flutter_platform_interface: ^2.8.0` changes. And also add new functionality to the `WidgetMarkerGoogleMap` widget.
 
 Google map with widget markers.
 
@@ -18,7 +18,7 @@ Follow the steps on [google_maps_flutter document.](https://pub.dev/packages/goo
 
 ## Migrating to 1.0
 
-The update to the `google_maps_flutter_platform_interface: ^2.8.0` changes that, Deprecate`BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` that handles it in a `BytesMapBitmap`.
+The update to the `google_maps_flutter_platform_interface: ^2.8.0` changes that Deprecate`BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` that handles it in a `BytesMapBitmap`.
 
 Declaring a multiplatform marker
 
