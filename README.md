@@ -12,68 +12,101 @@ Google map with widget markers.
 ## Set up
 Follow the steps on [google_maps_flutter document.](https://pub.dev/packages/google_maps_flutter#getting-started)
 
-## Usage
 
-Same as google_maps_flutter except for `widgetMarkers`.
+## Migrating to 1.0
+
+The update to the `google_maps_flutter_platform_interface: ^2.8.0` changes that, Deprecate`BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` that handles it in a `BytesMapBitmap`.
+
+Declaring a multiplatform marker
 
 ```dart
- WidgetMarkerGoogleMap(
-    initialCameraPosition: shibuya,
-    mapType: MapType.normal,
-    widgetMarkers: [
-      WidgetMarker(
-        position: cafePosition,
-        markerId: 'cafe',
-        widget: Container(
-          color: Colors.brown,
-          padding: const EdgeInsets.all(2),
-          child: const Icon(
-            Icons.coffee,
-            color: Colors.white,
-            size: 64,
-          ),
-        ),
-      ),
-      WidgetMarker(
-        position: clothesShopPosition,
-        markerId: 'clothes',
-        widget: Container(
-          color: Colors.green,
-          padding: const EdgeInsets.all(4),
-          child: const Text(
-            'shop',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-            ),
-          ),
-        ),
-      ),
-      WidgetMarker(
-        position: hamburgerShopPosition,
-        markerId: 'hamburger',
-        widget: Container(
-          color: Colors.red,
-          padding: const EdgeInsets.all(2),
-          child: const Icon(
-            Icons.fastfood,
-            color: Colors.yellow,
-            size: 64,
-          ),
-        ),
-      ),
-    ],
+WidgetMarker(
+  position: cafePosition,
+  markerId: 'cafe',
+  widget: Container(
+    color: Colors.brown,
+    padding: const EdgeInsets.all(2),
+    child: Icon(
+      Icons.coffee,
+      color: Colors.white,
+      size: 14 * MarkerGenerator.getDevicePixelRatio(context),
+    ),
   ),
+)
+```
+
+### 1.0 Usage and Breaking changes
+
+Changed `markers` and `widgetMarkers` from a `Set` to a `Map`
+This code can be seen in the example below.
+
+```dart
+WidgetMarkerGoogleMap(
+  initialCameraPosition: shibuya,
+  mapType: MapType.normal,
+  markers: {
+    const MarkerId('default_marker'): Marker(
+      position: shibuya.target,
+      markerId: const MarkerId('default_marker'),
+    ),
+  },
+  widgetMarkers: <MarkerId, WidgetMarker>{
+    const MarkerId(
+      'cafe',
+    ): WidgetMarker(
+      position: cafePosition,
+      markerId: 'cafe',
+      widget: Container(
+        color: Colors.brown,
+        padding: const EdgeInsets.all(2),
+        child: Icon(
+          Icons.coffee,
+          color: Colors.white,
+          size: 14 * MarkerGenerator.getDevicePixelRatio(context),
+        ),
+      ),
+    ),
+    const MarkerId(
+      'clothes',
+    ): WidgetMarker(
+      position: clothesShopPosition,
+      markerId: 'clothes',
+      widget: Container(
+        color: Colors.green,
+        padding: const EdgeInsets.all(4),
+        child: Text(
+          'shop',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 10 * MarkerGenerator.getDevicePixelRatio(context),
+          ),
+        ),
+      ),
+    ),
+    const MarkerId(
+      'network_flutterlogo',
+    ): WidgetMarker(
+      position: flutterLogoPosition,
+      markerId: 'network_flutterlogo',
+      widget: SizedBox(
+        width: 18 * MarkerGenerator.getDevicePixelRatio(context),
+        height: 18 * MarkerGenerator.getDevicePixelRatio(context),
+        child: Image.network(
+          'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+        ),
+      ),
+    ),
+  },
+)
 ```
 
 ### WidgetMarker
 
 You need to insert the list of `WidgetMarker` to use widget markers.
- 
 Make sure that you still need to use `onTap` method when you use gestures.
 
-```widget_marker.dart
+```dart
 class WidgetMarker {
   WidgetMarker({
     required this.position,
@@ -97,54 +130,7 @@ class WidgetMarker {
 
 If you have any requests or questions, feel free to ask on [github](https://github.com/santa112358/widget_marker_google_map/issues).
 
-### Migrating to 1.0
 
-The update to the `google_maps_flutter_platform_interface: ^2.8.0` changes that, Deprecate `BitmapDescriptor.fromBytes` in favor of `BitmapDescriptor.bytes` and `BytesMapBitmap`.
-
-This fixed a long standing bug where the markers size would change depending of the platform.
-
-The workaround before used to be to multiply the `devicePixelRatio` to the `width` and `height` of the `BitmapDescriptor.fromBytes` to make the markers the same size across platforms and use the value of 1 for `devicePixelRatio` of web platform.
-
-This would make code like this:
-
-#### Before
-```dart
-WidgetMarker(
-  position: cafePosition,
-  markerId: 'cafe',
-  widget: Container(
-    color: Colors.brown,
-    padding: const EdgeInsets.all(2),
-    child: Icon(
-      Icons.coffee,
-      color: Colors.white,
-      size: 14 * MediaQuery.of(context).devicePixelRatio,
-    ),
-  ),
-)
-```
-
-Now this code will have to be changed to:
-
-#### After
-
-```dart
-WidgetMarker(
-  position: cafePosition,
-  markerId: 'cafe',
-  widget: Container(
-    color: Colors.brown,
-    padding: const EdgeInsets.all(2),
-    child: const Icon(
-      Icons.coffee,
-      color: Colors.white,
-      size: 14,
-    ),
-  ),
-)
-```
-
-It is more straightforward and easier to maintain. This being the only consideration if you have been mainting a multiplatform app with this package, or `google_maps_flutter` in general.
 
 ## Contributors ✨
 

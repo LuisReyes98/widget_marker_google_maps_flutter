@@ -37,7 +37,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
     /// Forced delay to give time for images to render on [Image] widgets.
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 500));
     RenderRepaintBoundary boundary =
         key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
 

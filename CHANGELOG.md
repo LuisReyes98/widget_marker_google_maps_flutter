@@ -7,6 +7,7 @@
 - Breaking change use of new method `BitmapDescriptor.bytes` unifies marker size across platforms web, android and ios, and previous work arounds that used the `devicePixelRatio` are no longer needed and in turn will make the markers too big.
 - Added new `GoogleMap` props to be available from the `WidgetMarkerGoogleMap` widget.
 - Changed `markers` and `widgetMarkers` from a `Set` to a `Map`
+- Added a 500ms delay to the `MarkerGenerator` to allow the widgets to use loaded images of any kind.
 
 
 ## 0.0.2
