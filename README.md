@@ -144,6 +144,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/davey06"><img src="https://avatars.githubusercontent.com/u/32833275?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Devin</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=davey06" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://pub.dev/publishers/3tadev.work/packages"><img src="https://avatars.githubusercontent.com/u/43510799?v=4?s=100" width="100px;" alt="Santa Takahashi"/><br /><sub><b>Santa Takahashi</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=santa112358" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LuisReyes98"><img src="https://avatars.githubusercontent.com/u/26679961?v=4?s=100" width="100px;" alt="Devin"/><br /><sub><b>Luis Rogelio</b></sub></a><br /><a href="https://github.com/santa112358/widget_marker_google_map/commits?author=LuisReyes98" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
