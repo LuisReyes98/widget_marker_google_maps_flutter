@@ -346,6 +346,9 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
+    notifier.value = parentWidgetMarkers;
+    plainNotifier.value = rawMarkers;
+
     return Stack(
       children: [
         if (widget.widgetMarkers.isNotEmpty)
@@ -370,6 +373,7 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           markers: parentWidgetMarkers.isNotEmpty
               ? _markers.values.toSet()
               : widget.markers.values.toSet(),
+          webGestureHandling: widget.webGestureHandling,
           initialCameraPosition: widget.initialCameraPosition,
           onMapCreated: widget.onMapCreated,
           gestureRecognizers: widget.gestureRecognizers,
@@ -401,11 +405,10 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
           cloudMapId: widget.cloudMapId,
-          webGestureHandling: widget.webGestureHandling,
-          style: widget.style,
-          clusterManagers: widget.clusterManagers,
           fortyFiveDegreeImageryEnabled: widget.fortyFiveDegreeImageryEnabled,
           heatmaps: widget.heatmaps,
+          style: widget.style,
+          clusterManagers: widget.clusterManagers,
         ),
       ],
     );
