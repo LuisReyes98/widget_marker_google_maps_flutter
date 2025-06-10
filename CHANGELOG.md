@@ -1,3 +1,10 @@
+# Changelog
+
+## 1.0.1
+- Added `zIndexInt` to `WidgetMarker` and deprecated `zIndex` in favor of `zIndexInt`. To Match `google_maps_flutter` changes.
+- Added `groundOverlays` to `WidgetMarkerGoogleMap` to match `google_maps_flutter` changes.
+- Updated `google_maps_flutter` to `^2.12.3` to match the latest version.
+
 ## 1.0.0
 - Forked from `https://pub.dev/packages/widget_marker_google_map`
 - Upgraded for flutter 3 linting rules

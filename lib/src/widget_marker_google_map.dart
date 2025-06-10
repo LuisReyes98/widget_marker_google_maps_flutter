@@ -205,6 +205,9 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   /// It is managed in a global scope to allow clearing of its cache at any moment
   final bool useCache;
 
+  /// Ground overlays to be placed on the map.
+  final Set<GroundOverlay> groundOverlays;
+
   const WidgetMarkerGoogleMap({
     super.key,
     required this.initialCameraPosition,
@@ -248,6 +251,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
     this.fortyFiveDegreeImageryEnabled = false,
     this.heatmaps = const <Heatmap>{},
     this.useCache = false,
+    this.groundOverlays = const <GroundOverlay>{},
   });
 
   @override
@@ -409,6 +413,7 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           heatmaps: widget.heatmaps,
           style: widget.style,
           clusterManagers: widget.clusterManagers,
+          groundOverlays: widget.groundOverlays,
         ),
       ],
     );
@@ -427,7 +432,7 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
       infoWindow: widgetMarker.infoWindow,
       rotation: widgetMarker.rotation,
       visible: widgetMarker.visible,
-      zIndex: widgetMarker.zIndex,
+      zIndexInt: widgetMarker.zIndexInt,
       onDragStart: widgetMarker.onDragStart,
       onDragEnd: widgetMarker.onDragEnd,
       onDrag: widgetMarker.onDrag,

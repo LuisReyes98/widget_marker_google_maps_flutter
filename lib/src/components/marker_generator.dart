@@ -70,7 +70,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       infoWindow: widgetMarker.infoWindow,
       rotation: widgetMarker.rotation,
       visible: widgetMarker.visible,
-      zIndex: widgetMarker.zIndex,
+      zIndexInt: widgetMarker.zIndexInt,
       onDragStart: widgetMarker.onDragStart,
       onDragEnd: widgetMarker.onDragEnd,
       onDrag: widgetMarker.onDrag,
