@@ -11,7 +11,7 @@ class WidgetMarker {
     this.infoWindow = InfoWindow.noText,
     this.rotation = 0.0,
     this.visible = true,
-    this.zIndex = 0.0,
+    @Deprecated('Use zIndexInt instead') this.zIndex = 0.0,
     this.zIndexInt = 0,
     this.onDrag,
     this.onDragStart,

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Marking `zIndex` as deprecated in `WidgetMarker` builder in favor of `zIndexInt`.
+
 ## 1.0.1
 - Added `zIndexInt` to `WidgetMarker` and deprecated `zIndex` in favor of `zIndexInt`. To Match `google_maps_flutter` changes.
 - Added `groundOverlays` to `WidgetMarkerGoogleMap` to match `google_maps_flutter` changes.
