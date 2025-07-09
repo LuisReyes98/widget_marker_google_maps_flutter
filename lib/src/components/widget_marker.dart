@@ -12,6 +12,7 @@ class WidgetMarker {
     this.rotation = 0.0,
     this.visible = true,
     this.zIndex = 0.0,
+    this.zIndexInt = 0,
     this.onDrag,
     this.onDragStart,
     this.onDragEnd,
@@ -53,7 +54,14 @@ class WidgetMarker {
   ///
   /// Overlays are drawn in order of z-index, so that lower values means drawn
   /// earlier, and thus appearing to be closer to the surface of the Earth.
-  final double zIndex;
+  /// This is a double value, but it is recommended to use an integer value
+  @Deprecated('Use zIndexInt instead')
+  final double? zIndex;
+
+  /// The z-index of the marker, used to determine relative drawing order of
+  /// map overlays.
+  /// Google Maps Flutter has migrated to using integer z-index values with zIndexInt, so for parity compatibility, we are doing the same.
+  final int zIndexInt;
 
   /// Signature reporting the new [LatLng] at the start of a drag event.
   final ValueChanged<LatLng>? onDragStart;
@@ -97,7 +105,6 @@ class WidgetMarker {
     InfoWindow? infoWindow,
     double? rotation,
     bool? visible,
-    double? zIndex,
     ValueChanged<LatLng>? onDragStart,
     ValueChanged<LatLng>? onDragEnd,
     ValueChanged<LatLng>? onDrag,
@@ -106,6 +113,7 @@ class WidgetMarker {
     Offset? anchor,
     bool? flat,
     bool? consumeTapEvents,
+    int? zIndexInt,
   }) {
     return WidgetMarker(
       position: position ?? this.position,
@@ -116,7 +124,8 @@ class WidgetMarker {
       infoWindow: infoWindow ?? this.infoWindow,
       rotation: rotation ?? this.rotation,
       visible: visible ?? this.visible,
-      zIndex: zIndex ?? this.zIndex,
+      zIndex: zIndexInt?.toDouble() ?? zIndex,
+      zIndexInt: zIndexInt ?? this.zIndexInt,
       onDragStart: onDragStart ?? this.onDragStart,
       onDragEnd: onDragEnd ?? this.onDragEnd,
       onDrag: onDrag ?? this.onDrag,
@@ -130,7 +139,7 @@ class WidgetMarker {
 
   @override
   String toString() {
-    return 'WidgetMarker(position: $position, markerId: $markerId, onTap: $onTap, widget: $widget, draggable: $draggable, infoWindow: $infoWindow, rotation: $rotation, visible: $visible, zIndex: $zIndex, onDragStart: $onDragStart, onDragEnd: $onDragEnd, onDrag: $onDrag)';
+    return 'WidgetMarker(position: $position, markerId: $markerId, onTap: $onTap, widget: $widget, draggable: $draggable, infoWindow: $infoWindow, rotation: $rotation, visible: $visible, zIndex: $zIndex, zIndexInt: $zIndexInt, onDragStart: $onDragStart, onDragEnd: $onDragEnd, onDrag: $onDrag)';
   }
 
   @override
@@ -153,7 +162,8 @@ class WidgetMarker {
             other.alpha == alpha &&
             other.anchor == anchor &&
             other.flat == flat &&
-            other.consumeTapEvents == consumeTapEvents;
+            other.consumeTapEvents == consumeTapEvents &&
+            other.zIndexInt == zIndexInt;
   }
 
   @override
@@ -174,6 +184,7 @@ class WidgetMarker {
         alpha.hashCode ^
         anchor.hashCode ^
         flat.hashCode ^
-        consumeTapEvents.hashCode;
+        consumeTapEvents.hashCode ^
+        zIndexInt.hashCode;
   }
 }

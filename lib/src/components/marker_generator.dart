@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-import '../../widget_marker_google_map.dart';
+import '../../widget_marker_google_maps_flutter.dart';
 
 class MarkerGenerator extends StatefulWidget {
   const MarkerGenerator({
@@ -70,7 +70,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       infoWindow: widgetMarker.infoWindow,
       rotation: widgetMarker.rotation,
       visible: widgetMarker.visible,
-      zIndex: widgetMarker.zIndex,
+      zIndexInt: widgetMarker.zIndexInt,
       onDragStart: widgetMarker.onDragStart,
       onDragEnd: widgetMarker.onDragEnd,
       onDrag: widgetMarker.onDrag,

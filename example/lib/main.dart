@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widget_marker_google_maps_flutter/widget_marker_google_map.dart';
+import 'package:widget_marker_google_maps_flutter/widget_marker_google_maps_flutter.dart';
 
 void main() {
   runApp(const MyApp());

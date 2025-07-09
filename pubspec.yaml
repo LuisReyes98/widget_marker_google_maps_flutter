@@ -1,6 +1,6 @@
 name: widget_marker_google_maps_flutter
 description: Customized google map with widget markers. Enables to show markers with widget code.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/LuisReyes98/widget_marker_google_maps_flutter
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^2.9.0
+  google_maps_flutter: ^2.12.3
   google_maps_flutter_platform_interface: ^2.8.0
 
 dev_dependencies:
