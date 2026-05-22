@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:widget_marker_google_maps_flutter/widget_marker_google_maps_flutter.dart';
 
 void main() {
@@ -37,14 +38,17 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: WidgetMarkerGoogleMap(
+        mapId: 'main_app_id',
         initialCameraPosition: shibuya,
         mapType: MapType.normal,
         markers: {
-          const MarkerId('default_marker'): Marker(
+          const MarkerId('default_marker'): AdvancedMarker(
             position: shibuya.target,
             markerId: const MarkerId('default_marker'),
+            icon: BitmapDescriptor.defaultMarker,
           ),
         },
+        markerType: GoogleMapMarkerType.advancedMarker,
         widgetMarkers: <MarkerId, WidgetMarker>{
           const MarkerId(
             'cafe',
@@ -88,7 +92,7 @@ class MyHomePage extends StatelessWidget {
               width: 18 * MarkerGenerator.getDevicePixelRatio(context),
               height: 18 * MarkerGenerator.getDevicePixelRatio(context),
               child: Image.network(
-                'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+                'https://flutter.dev/assets/icon_flutter.4262c71228b7aa391e995fe5f1d57795.png',
               ),
             ),
           ),

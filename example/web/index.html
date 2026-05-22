@@ -33,8 +33,11 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- Google Map API key -->
+  <!-- marker dependency in URL is needed for advanced markers -->
   <script
-    src="https://maps.googleapis.com/maps/api/js?key={YOUR_API_KEY}">
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key={YOUR_API_KEY}&libraries=places,marker">
     </script>
   <!-- End google maps -->
 </head>

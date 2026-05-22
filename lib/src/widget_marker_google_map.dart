@@ -397,6 +397,7 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
         if (widget.widgetMarkers.isNotEmpty)
           MarkerGenerator(
             widgetMarkers: widgetMarkersToGenerate,
+            markerType: widget.markerType,
             onMarkerGenerated: (generatedMarkers) {
               for (final generatedMarker in generatedMarkers) {
                 WidgetMarkerCache.setMarkerBitmap(
@@ -404,6 +405,19 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
                   bitmap: generatedMarker.icon,
                 );
                 _markers[generatedMarker.markerId] = generatedMarker;
+              }
+              Future.delayed(Duration.zero, () {
+                // delay set state to make sure it is called last in the frame
+                setState(() {});
+              });
+            },
+            onAdvancedMarkerGenerated: (generatedAdvancedMarkers) {
+              for (final generatedAdvancedMarker in generatedAdvancedMarkers) {
+                WidgetMarkerCache.setMarkerBitmap(
+                  markerId: generatedAdvancedMarker.markerId,
+                  bitmap: generatedAdvancedMarker.icon,
+                );
+                _markers[generatedAdvancedMarker.markerId] = generatedAdvancedMarker;
               }
               Future.delayed(Duration.zero, () {
                 // delay set state to make sure it is called last in the frame

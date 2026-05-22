@@ -8,26 +8,22 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../widget_marker_google_maps_flutter.dart';
 
 class MarkerGenerator extends StatefulWidget {
-  MarkerGenerator({
+  const MarkerGenerator({
     super.key,
     required this.widgetMarkers,
     this.onMarkerGenerated,
     this.onAdvancedMarkerGenerated,
+    this.markerType = GoogleMapMarkerType.marker,
   })  : assert(
           onMarkerGenerated != null || onAdvancedMarkerGenerated != null,
           'Either onMarkerGenerated or onAdvancedMarkerGenerated must be provided',
         ),
         assert(
-          !(onMarkerGenerated != null && onAdvancedMarkerGenerated != null),
-          'Both onMarkerGenerated and onAdvancedMarkerGenerated cannot be provided at the same time',
-        ) {
-    if (onMarkerGenerated != null) {
-      markerType = GoogleMapMarkerType.marker;
-    } else {
-      markerType = GoogleMapMarkerType.advancedMarker;
-    }
-  }
-  late final GoogleMapMarkerType markerType;
+          markerType == GoogleMapMarkerType.marker && onMarkerGenerated != null ||
+              markerType == GoogleMapMarkerType.advancedMarker && onAdvancedMarkerGenerated != null,
+          'onMarkerGenerated must be provided if markerType is Marker, and onAdvancedMarkerGenerated must be provided if markerType is AdvancedMarker',
+        );
+  final GoogleMapMarkerType markerType;
   final List<WidgetMarker> widgetMarkers;
   final ValueChanged<List<Marker>>? onMarkerGenerated;
   final ValueChanged<List<AdvancedMarker>>? onAdvancedMarkerGenerated;
