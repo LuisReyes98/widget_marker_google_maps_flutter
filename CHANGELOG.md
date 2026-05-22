@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.0
+- Updated to support `google_maps_flutter` version `^2.17.0` and `AdvancedMarkers`.
+
 ## 1.0.2
 
 - Marking `zIndex` as deprecated in `WidgetMarker` builder in favor of `zIndexInt`.

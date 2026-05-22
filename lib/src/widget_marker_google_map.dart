@@ -14,7 +14,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   ///
   /// See https://developers.google.com/maps/documentation/get-map-id
   /// for more details.
-  final String? cloudMapId;
+  final String? mapId;
 
   /// Callback method for when the map is ready to be used.
   ///
@@ -205,8 +205,44 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
   /// It is managed in a global scope to allow clearing of its cache at any moment
   final bool useCache;
 
-  /// Ground overlays to be placed on the map.
+  /// Ground overlays to be initialized for the map.
+  ///
   final Set<GroundOverlay> groundOverlays;
+
+  /// Indicates whether map uses [AdvancedMarker]s or [Marker]s.
+  ///
+  /// [AdvancedMarker] and [Marker]s classes might not be related to each other
+  /// in the platform implementation. It's important to set the correct
+  /// [GoogleMapMarkerType] so that the platform implementation can handle the
+  /// markers:
+  /// * If [GoogleMapMarkerType.advancedMarker] is used, all markers must be of
+  ///   type [AdvancedMarker].
+  /// * If [GoogleMapMarkerType.marker] is used, markers cannot be of type
+  ///   [AdvancedMarker].
+  ///
+  /// While some features work with either type, using the incorrect type
+  /// may result in unexpected behavior.
+  final GoogleMapMarkerType markerType;
+
+  /// Color scheme for the cloud-style map. Web only.
+  ///
+  /// The colorScheme option can only be set when the map is initialized;
+  /// setting this option after the map is created will have no effect.
+  ///
+  /// See https://developers.google.com/maps/documentation/javascript/mapcolorscheme for more details.
+  final MapColorScheme? colorScheme;
+
+  /// Enables or disables the Camera controls. Web only.
+  ///
+  /// See https://developers.google.com/maps/documentation/javascript/controls for more details.
+  final bool webCameraControlEnabled;
+
+  /// This setting controls how the API handles cameraControl button position on the map. Web only.
+  ///
+  /// If null, the Google Maps API will use its default camera control position.
+  ///
+  /// See [WebCameraControlPosition] for more details.
+  final WebCameraControlPosition? webCameraControlPosition;
 
   const WidgetMarkerGoogleMap({
     super.key,
@@ -244,7 +280,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
-    this.cloudMapId,
+    this.mapId,
     this.webGestureHandling,
     this.style,
     this.clusterManagers = const <ClusterManager>{},
@@ -252,6 +288,10 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
     this.heatmaps = const <Heatmap>{},
     this.useCache = false,
     this.groundOverlays = const <GroundOverlay>{},
+    this.markerType = GoogleMapMarkerType.marker,
+    this.colorScheme,
+    this.webCameraControlEnabled = true,
+    this.webCameraControlPosition,
   });
 
   @override
@@ -261,8 +301,7 @@ class WidgetMarkerGoogleMap extends StatefulWidget {
 /// Helper class to keep cache of the generated markers images
 class WidgetMarkerCache {
   /// Variable to maintain cache of the generated marker images
-  static Map<MarkerId, BitmapDescriptor> _allGeneratedMarkersIcons =
-      <MarkerId, BitmapDescriptor>{};
+  static Map<MarkerId, BitmapDescriptor> _allGeneratedMarkersIcons = <MarkerId, BitmapDescriptor>{};
 
   /// Remove a marker by its markerId
   static void removeMarker(MarkerId markerId) {
@@ -374,9 +413,7 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           ),
         GoogleMap(
           key: widget.key,
-          markers: parentWidgetMarkers.isNotEmpty
-              ? _markers.values.toSet()
-              : widget.markers.values.toSet(),
+          markers: parentWidgetMarkers.isNotEmpty ? _markers.values.toSet() : widget.markers.values.toSet(),
           webGestureHandling: widget.webGestureHandling,
           initialCameraPosition: widget.initialCameraPosition,
           onMapCreated: widget.onMapCreated,
@@ -408,12 +445,16 @@ class _WidgetMarkerGoogleMapState extends State<WidgetMarkerGoogleMap> {
           onCameraIdle: widget.onCameraIdle,
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
-          cloudMapId: widget.cloudMapId,
+          mapId: widget.mapId,
           fortyFiveDegreeImageryEnabled: widget.fortyFiveDegreeImageryEnabled,
           heatmaps: widget.heatmaps,
           style: widget.style,
           clusterManagers: widget.clusterManagers,
           groundOverlays: widget.groundOverlays,
+          markerType: widget.markerType,
+          colorScheme: widget.colorScheme,
+          webCameraControlEnabled: widget.webCameraControlEnabled,
+          webCameraControlPosition: widget.webCameraControlPosition,
         ),
       ],
     );

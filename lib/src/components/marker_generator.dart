@@ -3,18 +3,34 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../widget_marker_google_maps_flutter.dart';
 
 class MarkerGenerator extends StatefulWidget {
-  const MarkerGenerator({
+  MarkerGenerator({
     super.key,
     required this.widgetMarkers,
-    required this.onMarkerGenerated,
-  });
+    this.onMarkerGenerated,
+    this.onAdvancedMarkerGenerated,
+  })  : assert(
+          onMarkerGenerated != null || onAdvancedMarkerGenerated != null,
+          'Either onMarkerGenerated or onAdvancedMarkerGenerated must be provided',
+        ),
+        assert(
+          !(onMarkerGenerated != null && onAdvancedMarkerGenerated != null),
+          'Both onMarkerGenerated and onAdvancedMarkerGenerated cannot be provided at the same time',
+        ) {
+    if (onMarkerGenerated != null) {
+      markerType = GoogleMapMarkerType.marker;
+    } else {
+      markerType = GoogleMapMarkerType.advancedMarker;
+    }
+  }
+  late final GoogleMapMarkerType markerType;
   final List<WidgetMarker> widgetMarkers;
-  final ValueChanged<List<Marker>> onMarkerGenerated;
+  final ValueChanged<List<Marker>>? onMarkerGenerated;
+  final ValueChanged<List<AdvancedMarker>>? onAdvancedMarkerGenerated;
 
   @override
   State<MarkerGenerator> createState() => _MarkerGeneratorState();
@@ -38,18 +54,15 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
 
     /// Forced delay to give time for images to render on [Image] widgets.
     await Future.delayed(const Duration(milliseconds: 500));
-    RenderRepaintBoundary boundary =
-        key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    RenderRepaintBoundary boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
 
     final image = await boundary.toImage(pixelRatio: 2);
-    final byteData =
-        await image.toByteData(format: ImageByteFormat.png) ?? ByteData(0);
+    final byteData = await image.toByteData(format: ImageByteFormat.png) ?? ByteData(0);
     final uint8List = byteData.buffer.asUint8List();
     final widgetMarker = widget.widgetMarkers[globalKeys.indexOf(key)];
 
     /// Dont do bitmapScaling if is web integration, in the case that it is Safari using bitmapScaling will cause Safari to run out of memory and crash, and on other web integrations it is made work by using the imagePixelRatio
-    MapBitmapScaling bitmapScaling =
-        kIsWeb ? MapBitmapScaling.none : MapBitmapScaling.auto;
+    MapBitmapScaling bitmapScaling = kIsWeb ? MapBitmapScaling.none : MapBitmapScaling.auto;
     double? imagePixelRatio = kIsWeb ? null : pixelRatio;
 
     return Marker(
@@ -77,6 +90,48 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
     );
   }
 
+  Future<AdvancedMarker> _convertToAdvancedMarker(GlobalKey key) async {
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    /// Forced delay to give time for images to render on [Image] widgets.
+    await Future.delayed(const Duration(milliseconds: 500));
+    RenderRepaintBoundary boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+
+    final image = await boundary.toImage(pixelRatio: 2);
+    final byteData = await image.toByteData(format: ImageByteFormat.png) ?? ByteData(0);
+    final uint8List = byteData.buffer.asUint8List();
+    final widgetMarker = widget.widgetMarkers[globalKeys.indexOf(key)];
+
+    /// Dont do bitmapScaling if is web integration, in the case that it is Safari using bitmapScaling will cause Safari to run out of memory and crash, and on other web integrations it is made work by using the imagePixelRatio
+    MapBitmapScaling bitmapScaling = kIsWeb ? MapBitmapScaling.none : MapBitmapScaling.auto;
+    double? imagePixelRatio = kIsWeb ? null : pixelRatio;
+
+    return AdvancedMarker(
+      onTap: widgetMarker.onTap,
+      markerId: MarkerId(widgetMarker.markerId),
+      position: widgetMarker.position,
+      alpha: widgetMarker.alpha,
+      anchor: widgetMarker.anchor,
+      flat: widgetMarker.flat,
+      clusterManagerId: widgetMarker.clusterManagerId,
+      consumeTapEvents: widgetMarker.consumeTapEvents,
+      icon: BitmapDescriptor.bytes(
+        uint8List,
+        bitmapScaling: bitmapScaling,
+        imagePixelRatio: imagePixelRatio,
+      ),
+      draggable: widgetMarker.draggable,
+      infoWindow: widgetMarker.infoWindow,
+      rotation: widgetMarker.rotation,
+      visible: widgetMarker.visible,
+      zIndex: widgetMarker.zIndexInt,
+      onDragStart: widgetMarker.onDragStart,
+      onDragEnd: widgetMarker.onDragEnd,
+      onDrag: widgetMarker.onDrag,
+      collisionBehavior: widgetMarker.collisionBehavior,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,8 +140,7 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
 
   @override
   void didUpdateWidget(MarkerGenerator oldWidget) {
-    if (oldWidget.widgetMarkers != widget.widgetMarkers &&
-        widget.widgetMarkers.isNotEmpty) {
+    if (oldWidget.widgetMarkers != widget.widgetMarkers && widget.widgetMarkers.isNotEmpty) {
       /// To force that changes on state are reflected on the map immediately
       WidgetsBinding.instance.addPostFrameCallback((_) => onBuildCompleted());
     }
@@ -100,9 +154,14 @@ class _MarkerGeneratorState extends State<MarkerGenerator> {
       return;
     }
     lastMarkers = widget.widgetMarkers;
-    final markers =
-        await Future.wait(globalKeys.map((key) => _convertToMarker(key)));
-    widget.onMarkerGenerated.call(markers);
+
+    if (widget.markerType == GoogleMapMarkerType.marker) {
+      final markers = await Future.wait(globalKeys.map((key) => _convertToMarker(key)));
+      widget.onMarkerGenerated?.call(markers);
+    } else {
+      final advancedMarkers = await Future.wait(globalKeys.map((key) => _convertToAdvancedMarker(key)));
+      widget.onAdvancedMarkerGenerated?.call(advancedMarkers);
+    }
   }
 
   @override

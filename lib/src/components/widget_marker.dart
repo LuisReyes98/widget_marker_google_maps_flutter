@@ -11,7 +11,6 @@ class WidgetMarker {
     this.infoWindow = InfoWindow.noText,
     this.rotation = 0.0,
     this.visible = true,
-    @Deprecated('Use zIndexInt instead') this.zIndex = 0.0,
     this.zIndexInt = 0,
     this.onDrag,
     this.onDragStart,
@@ -21,7 +20,10 @@ class WidgetMarker {
     this.anchor = const Offset(0.5, 1.0),
     this.flat = false,
     this.consumeTapEvents = false,
+    this.collisionBehavior = MarkerCollisionBehavior.requiredDisplay,
   }) : assert(markerId != '');
+
+  final MarkerCollisionBehavior collisionBehavior;
 
   final LatLng position;
 
@@ -48,15 +50,6 @@ class WidgetMarker {
 
   /// True if the marker is visible.
   final bool visible;
-
-  /// The z-index of the marker, used to determine relative drawing order of
-  /// map overlays.
-  ///
-  /// Overlays are drawn in order of z-index, so that lower values means drawn
-  /// earlier, and thus appearing to be closer to the surface of the Earth.
-  /// This is a double value, but it is recommended to use an integer value
-  @Deprecated('Use zIndexInt instead')
-  final double? zIndex;
 
   /// The z-index of the marker, used to determine relative drawing order of
   /// map overlays.
@@ -124,7 +117,6 @@ class WidgetMarker {
       infoWindow: infoWindow ?? this.infoWindow,
       rotation: rotation ?? this.rotation,
       visible: visible ?? this.visible,
-      zIndex: zIndexInt?.toDouble() ?? zIndex,
       zIndexInt: zIndexInt ?? this.zIndexInt,
       onDragStart: onDragStart ?? this.onDragStart,
       onDragEnd: onDragEnd ?? this.onDragEnd,
@@ -139,7 +131,7 @@ class WidgetMarker {
 
   @override
   String toString() {
-    return 'WidgetMarker(position: $position, markerId: $markerId, onTap: $onTap, widget: $widget, draggable: $draggable, infoWindow: $infoWindow, rotation: $rotation, visible: $visible, zIndex: $zIndex, zIndexInt: $zIndexInt, onDragStart: $onDragStart, onDragEnd: $onDragEnd, onDrag: $onDrag)';
+    return 'WidgetMarker(position: $position, markerId: $markerId, onTap: $onTap, widget: $widget, draggable: $draggable, infoWindow: $infoWindow, rotation: $rotation, visible: $visible, zIndexInt: $zIndexInt, onDragStart: $onDragStart, onDragEnd: $onDragEnd, onDrag: $onDrag, clusterManagerId: $clusterManagerId, alpha: $alpha, anchor: $anchor, flat: $flat, consumeTapEvents: $consumeTapEvents)';
   }
 
   @override
@@ -154,7 +146,6 @@ class WidgetMarker {
             other.infoWindow == infoWindow &&
             other.rotation == rotation &&
             other.visible == visible &&
-            other.zIndex == zIndex &&
             other.onDragStart == onDragStart &&
             other.onDragEnd == onDragEnd &&
             other.onDrag == onDrag &&
@@ -163,7 +154,8 @@ class WidgetMarker {
             other.anchor == anchor &&
             other.flat == flat &&
             other.consumeTapEvents == consumeTapEvents &&
-            other.zIndexInt == zIndexInt;
+            other.zIndexInt == zIndexInt &&
+            other.collisionBehavior == collisionBehavior;
   }
 
   @override
@@ -176,7 +168,6 @@ class WidgetMarker {
         infoWindow.hashCode ^
         rotation.hashCode ^
         visible.hashCode ^
-        zIndex.hashCode ^
         onDragStart.hashCode ^
         onDragEnd.hashCode ^
         onDrag.hashCode ^
@@ -185,6 +176,7 @@ class WidgetMarker {
         anchor.hashCode ^
         flat.hashCode ^
         consumeTapEvents.hashCode ^
-        zIndexInt.hashCode;
+        zIndexInt.hashCode ^
+        collisionBehavior.hashCode;
   }
 }
